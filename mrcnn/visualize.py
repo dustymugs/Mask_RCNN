@@ -45,7 +45,7 @@ def display_images(images, titles=None, cols=4, cmap=None, norm=None,
     """
     titles = titles if titles is not None else [""] * len(images)
     rows = len(images) // cols + 1
-    plt.figure(figsize=(14, 14 * rows // cols))
+    fig = plt.figure(figsize=(14, 14 * rows // cols))
     i = 1
     for image, title in zip(images, titles):
         plt.subplot(rows, cols, i)
@@ -55,6 +55,7 @@ def display_images(images, titles=None, cols=4, cmap=None, norm=None,
                    norm=norm, interpolation=interpolation)
         i += 1
     plt.show()
+    return fig
 
 
 def random_colors(N, bright=True):
@@ -119,7 +120,8 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.set_ylim(height + 10, -10)
     ax.set_xlim(-10, width + 10)
     ax.axis('off')
-    ax.set_title(title)
+    plt.tight_layout()
+    # ax.set_title(title)
 
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
@@ -165,8 +167,7 @@ def display_instances(image, boxes, masks, class_ids, class_names,
             p = Polygon(verts, facecolor="none", edgecolor=color)
             ax.add_patch(p)
     ax.imshow(masked_image.astype(np.uint8))
-    if auto_show:
-        plt.show()
+    return plt.gcf()
 
 
 def display_differences(image,

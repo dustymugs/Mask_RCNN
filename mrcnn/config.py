@@ -5,6 +5,10 @@ Base Configurations class.
 Copyright (c) 2017 Matterport, Inc.
 Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
+
+Modifications
+Copyright (c) 2018/2019 Roland S. Zimmermann, Julien Siems
+Licensed under the MIT License (see LICENSE for details)
 """
 
 import math
@@ -204,6 +208,14 @@ class Config(object):
     # Gradient norm clipping
     GRADIENT_CLIP_NORM = 5.0
 
+    # edge agreement loss
+    RUN_NAME = None
+    EDGE_LOSS_SMOOTHING = False
+    EDGE_LOSS_FILTERS = []
+    EDGE_LOSS_NORM = "l2"
+    EDGE_LOSS_WEIGHT_FACTOR = 1.0
+    EDGE_LOSS_WEIGHT_ENTROPY = False
+
     def __init__(self):
         """Set values of computed attributes."""
         # Effective batch size
@@ -219,10 +231,10 @@ class Config(object):
         # See compose_image_meta() for details
         self.IMAGE_META_SIZE = 1 + 3 + 3 + 4 + 1 + self.NUM_CLASSES
 
-    def display(self):
+    def display(self, fh=None):
         """Display Configuration values."""
-        print("\nConfigurations:")
+        print("\nConfigurations:", file=fh)
         for a in dir(self):
             if not a.startswith("__") and not callable(getattr(self, a)):
-                print("{:30} {}".format(a, getattr(self, a)))
-        print("\n")
+                print("{:30} {}".format(a, getattr(self, a)), file=fh)
+        print("\n", file=fh)
