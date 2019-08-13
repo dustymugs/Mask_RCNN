@@ -248,12 +248,12 @@ This is an implementation of the improved training scheme [Faster Training of Ma
 
 Adding the new auxillary task can be done using this simple network head:
 <p align="center">
-    <img src="https://github.com/FlashTek/mask-rcnn-edge-agreement-loss/raw/master/edge_agreement_head_small.png" alt="Architecture" height="250">
+    <img src="assets/edge_agreement_head_small.png" alt="Architecture" height="250">
 </p>
 
 The choice of the edge detection filter influences the convergence speed up; as written in the paper, the best results were obtained using the `Sobel` filter.
 <p align="center">
-    <img src="https://github.com/FlashTek/mask-rcnn-edge-agreement-loss/raw/master/mask_loss.jpg" alt="Loss curves" height="350">
+    <img src="assets/mask_loss.jpg" alt="Loss curves" height="350">
 </p>
 If you like this work and want to use this in your work or research, please cite:
 
