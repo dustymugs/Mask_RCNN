@@ -97,7 +97,7 @@ def compute_overlaps(boxes1, boxes2):
     return overlaps
 
 
-def compute_overlaps_masks(masks1, masks2):
+def compute_overlaps_masks(masks1, masks2, threshold=0.5):
     """Computes IoU overlaps between two sets of masks.
     masks1, masks2: [Height, Width, instances]
     """
@@ -105,9 +105,19 @@ def compute_overlaps_masks(masks1, masks2):
     # If either set of masks is empty return empty result
     if masks1.shape[-1] == 0 or masks2.shape[-1] == 0:
         return np.zeros((masks1.shape[-1], masks2.shape[-1]))
+
+    # from: https://github.com/matterport/Mask_RCNN/issues/532#issuecomment-400091605
+    # Added the following two checker methods below to ensure that image with no mask detected is returned correctly
+    # ideas brought from https://github.com/matterport/Mask_RCNN/issues/532
+    if (
+        np.sum((masks1 > threshold).astype(np.uint8)) == 0 or
+        np.sum((masks2 > threshold).astype(np.uint8)) == 0
+    ):
+        return np.zeros((masks1.shape[0], masks2.shape[-1]))
+
     # flatten masks and compute their areas
-    masks1 = np.reshape(masks1 > .5, (-1, masks1.shape[-1])).astype(np.float32)
-    masks2 = np.reshape(masks2 > .5, (-1, masks2.shape[-1])).astype(np.float32)
+    masks1 = np.reshape(masks1 > threshold, (-1, masks1.shape[-1])).astype(np.float32)
+    masks2 = np.reshape(masks2 > threshold, (-1, masks2.shape[-1])).astype(np.float32)
     area1 = np.sum(masks1, axis=0)
     area2 = np.sum(masks2, axis=0)
 
